@@ -1,0 +1,43 @@
+
+/*Adds a light blue transparent wrap that surrounds the title*/
+.wrapper {
+  height: 65px;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  padding: 0 20px;
+  background-color: rgba(174, 217, 217, 0.8);
+}
+
+a.logo {
+  margin-right: auto;
+}
+
+a {
+  text-decoration: none;
+  color: #000000;
+  position: relative;
+  font-size: 1.25em;
+}
+
+/*sticks to the top of the page even as we scroll down*/
+.sticky {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+}
+
+/*makes the icon align with text*/
+.mat-icon {
+  vertical-align: middle;
+}
+
+/*creates background image*/
+.background-image {
+  background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5)), url("../../assets/img/bg_image.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100%;
+}
