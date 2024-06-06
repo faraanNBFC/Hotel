@@ -28,8 +28,8 @@ namespace Hotel_managemnet_system
                             AllowAnyMethod = true,
                             SupportsCredentials = true
                         };
-                        // Add allowed origins here
-                        policy.Origins.Add("http://localhost:4200"); // Your Angular app's origin
+                   
+                        policy.Origins.Add("http://localhost:4200");
 
                         return Task.FromResult(policy);
                     }

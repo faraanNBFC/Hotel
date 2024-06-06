@@ -1,4 +1,4 @@
-.mat-ttol-bar{
+.mat-tool-bar{
     margin: -24px;
     width: auto;
     margin-bottom: 10px;
@@ -12,4 +12,10 @@
 
 mat-form-field{
     padding: 5px
+}
+
+.button-position {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
