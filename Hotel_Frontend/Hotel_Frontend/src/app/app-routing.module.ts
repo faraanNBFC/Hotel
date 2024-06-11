@@ -3,12 +3,20 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component'; 
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { BookingsComponent } from './bookings/bookings.component';
+import { AuthGuardService } from './services/auth-guard.service';
+import { RoomComponent } from './room/room.component';
+import { ReservationComponent } from './reservation/reservation.component';
+import { AddRoomComponent } from './add-room/add-room.component';
+import { AuthGuardAdminService } from './services/auth-guard-admin.service';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'hotel', component: DashboardComponent },
-  { path: 'booking', component: BookingsComponent },
-  { path: '**', component: HomeComponent }
+  { path: 'hotel', component: DashboardComponent, canActivate: [AuthGuardService] },
+  { path: 'booking', component: BookingsComponent, canActivate: [AuthGuardService] },
+  { path: 'room', component: RoomComponent, canActivate: [AuthGuardAdminService] },
+  { path: 'reservation', component: ReservationComponent, canActivate: [AuthGuardAdminService] },
+  { path: 'new', component: AddRoomComponent, canActivate: [AuthGuardAdminService] },
+  { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 
 @NgModule({

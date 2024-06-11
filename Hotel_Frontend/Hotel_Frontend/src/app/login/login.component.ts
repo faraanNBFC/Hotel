@@ -6,6 +6,8 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { SnackbarService } from '../services/snackbar.service';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { GlobalConstants } from '../shared/global-constants';
+import { UserStorageService } from '../services/user-storage.service';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-login',
@@ -33,10 +35,37 @@ export class LoginComponent implements OnInit{
         password: formData.password
     }
     this.userService.login(data).subscribe((response: any) => {
+      let token = response.token;
+      let decodedToken = jwtDecode(token);
       this.ngxService.stop();
       this.dialogRef.close();
       localStorage.setItem('token', response.token);
       this.router.navigate(['/hotel']);
+      let payloadList = Object.entries(decodedToken).map(([key, value]) => ({ key, value }));
+      let idItem = payloadList.find(item => item.key === 'nameid');
+      let roleItem = payloadList.find(item => item.key === 'role');
+      let emailItem = payloadList.find(item => item.key === 'email');
+      let nameItem = payloadList.find(item => item.key === 'unique_name');
+      let idValue = idItem ? idItem.value : null;
+      let roleValue = roleItem ? roleItem.value : null;
+      let emailValue = emailItem ? emailItem.value : null;
+      let nameValue = nameItem ? nameItem.value : null;
+      if (roleValue != null) {
+        console.log(roleValue)
+        const user = {
+          id: idValue,
+          role: roleValue,
+          email: emailValue,
+          name: nameValue
+        }
+        UserStorageService.saveUser(user);
+        UserStorageService.saveToken(response.token);
+        if(UserStorageService.isAdminLoggedIn()){
+          this.router.navigate(['/room']);
+        }else if (UserStorageService.isUserLoggedIn()){
+          this.router.navigate(['/hotel']);
+        }
+      }
     }, (error) => {
       this.ngxService.stop();
        if (error.error?.message) {

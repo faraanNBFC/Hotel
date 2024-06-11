@@ -49,6 +49,9 @@ import { SignupComponent } from './signup/signup.component';
 import { NgxUiLoaderModule, NgxUiLoaderConfig, SPINNER, PB_DIRECTION } from 'ngx-ui-loader';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
+import { RoomComponent } from './room/room.component';
+import { ReservationComponent } from './reservation/reservation.component';
+import { AddRoomComponent } from './add-room/add-room.component';
 
 const ngxuiLoaderConfig: NgxUiLoaderConfig = {
   text: 'Loading...',
@@ -73,7 +76,10 @@ const ngxuiLoaderConfig: NgxUiLoaderConfig = {
     SidenavComponent,
     BookingsComponent,
     SignupComponent,
-    LoginComponent
+    LoginComponent,
+    RoomComponent,
+    ReservationComponent,
+    AddRoomComponent
   ],
   imports: [
     BrowserModule,

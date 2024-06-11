@@ -7,11 +7,11 @@
           <div class="move-right">
             <button mat-button [matMenuTriggerFor]="menu" class="user">
               <img src="../../assets/img/user.jpg" alt="User Avatar" class="user-image" />
-              User Name
+              {{username}}
               <mat-icon class="user-image-icon">keyboard_arrow_down</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-              <button mat-menu-item>
+              <button mat-menu-item (click)="logout()">
                 <mat-icon>
                   exit_to_app
                 </mat-icon>

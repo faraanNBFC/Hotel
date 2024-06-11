@@ -52,7 +52,7 @@ namespace Hotel_managemnet_system.Controllers
                 {
                     if (newUser.status == "true")
                     {
-                        return Request.CreateResponse(HttpStatusCode.OK, new { token = TokenManager.GenerateToken(newUser.email, newUser.role) });
+                        return Request.CreateResponse(HttpStatusCode.OK, new { token = TokenManager.GenerateToken(newUser.id.ToString(), newUser.email, newUser.role, newUser.name) });
                     }
                     else
                     {
@@ -145,23 +145,6 @@ namespace Hotel_managemnet_system.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex);
             }
-        }
-
-        [HttpPost, Route("logout")]
-        [CustomAuthenticationFilter]
-
-        public HttpResponseMessage Logout()
-        {
-            try
-            {
-                return Request.CreateResponse(HttpStatusCode.OK, new { message = "Logout successfully" });
-            }
-            catch (Exception e)
-            {
-
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, e);
-            }
-        }   
-
+        }  
     }
 }

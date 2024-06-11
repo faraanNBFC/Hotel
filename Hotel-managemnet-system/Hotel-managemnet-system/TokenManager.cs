@@ -14,15 +14,17 @@ namespace Hotel_managemnet_system
     {
         public static string Secret = "qwertyqwertyqwertyqwertyqwertyqwertyqwertyqwertyqwertyqwerty";
 
-        public static string GenerateToken(string email, string role) 
+        public static string GenerateToken(string id, string email, string role, string name) 
         {
             SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Secret));
             SecurityTokenDescriptor descriptor = new SecurityTokenDescriptor
             {
                 Subject = new System.Security.Claims.ClaimsIdentity(new[]
                 {
+                    new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.NameIdentifier, id),
                     new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Email, email),
-                    new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Role, role)
+                    new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Role, role),
+                    new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Name, name)
                 }),
                 Expires = DateTime.UtcNow.AddHours(8),
                 SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature)
@@ -73,10 +75,14 @@ namespace Hotel_managemnet_system
                 return null;
             }
             TokenClaim tokenClaim = new TokenClaim();
-            var temp = identity.FindFirst(ClaimTypes.Email);
+            var temp = identity.FindFirst(ClaimTypes.NameIdentifier);
+            tokenClaim.id = temp.Value;
+            temp = identity.FindFirst(ClaimTypes.Email);
             tokenClaim.email = temp.Value;
             temp = identity.FindFirst(ClaimTypes.Role);
             tokenClaim.role = temp.Value;
+            temp = identity.FindFirst(ClaimTypes.Name);
+            tokenClaim.name = temp.Value;
             return tokenClaim;
         }
     }
