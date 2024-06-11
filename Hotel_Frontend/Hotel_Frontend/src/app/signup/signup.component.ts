@@ -16,7 +16,7 @@ export class SignupComponent implements OnInit{
   signupForm: any = FormGroup;
   responseMessage: any;
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private userService: UserService, private snackbarSerive: SnackbarService, private dialogref: MatDialogRef<SignupComponent>, private ngxService: NgxUiLoaderService) { }
+  constructor(private formBuilder: FormBuilder, private router: Router, private userService: UserService, private snackbarService: SnackbarService, private dialogref: MatDialogRef<SignupComponent>, private ngxService: NgxUiLoaderService) { }
 
   ngOnInit(): void {
     this.signupForm = this.formBuilder.group({
@@ -40,7 +40,7 @@ export class SignupComponent implements OnInit{
       this.ngxService.stop();
       this.dialogref.close();
       this.responseMessage = response?.message;
-      this.snackbarSerive.openSnackBar(this.responseMessage, '');
+      this.snackbarService.openSnackBar(this.responseMessage, '');
       this.router.navigate(['/']);
     }, (error) => {
       this.ngxService.stop();
@@ -50,7 +50,7 @@ export class SignupComponent implements OnInit{
       else {
         this.responseMessage = GlobalConstants.genericError;
       }
-      this.snackbarSerive.openSnackBar(this.responseMessage, GlobalConstants.error);
+      this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
     })
   }
 }

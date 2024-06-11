@@ -25,6 +25,7 @@ namespace Hotel_managemnet_system.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.BadRequest, new { message = "You are not authorized to add room" });
                 }
+                room.roomStatus = "Available";
                 entities.Rooms.Add(room);
                 entities.SaveChanges();
                 return Request.CreateResponse(HttpStatusCode.OK, new { message = "Room added successfully" });
