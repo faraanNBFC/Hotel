@@ -8,6 +8,7 @@ import { RoomComponent } from './room/room.component';
 import { ReservationComponent } from './reservation/reservation.component';
 import { AddRoomComponent } from './add-room/add-room.component';
 import { AuthGuardAdminService } from './services/auth-guard-admin.service';
+import { EditRoomComponent } from './edit-room/edit-room.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },

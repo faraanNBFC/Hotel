@@ -37,12 +37,5 @@ mat-drawer-container {
   color: black;
   font-size: 2rem;
   position: relative;
-}
-
-.page__content-data {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  position: absolute;
-  text-align: center;
+  padding: 2rem;
 }

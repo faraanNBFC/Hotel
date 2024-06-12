@@ -36,9 +36,9 @@ namespace Hotel_managemnet_system.Controllers
             }
         }
 
-        [HttpGet, Route("getRooms")]
+        [HttpGet, Route("getRooms/{pageNumber}")]
         [CustomAuthenticationFilter]
-        public HttpResponseMessage GetRooms()
+        public HttpResponseMessage GetRooms(int pageNumber = 1, int pageSize = 6)
         {
             try
             {
@@ -48,8 +48,55 @@ namespace Hotel_managemnet_system.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.BadRequest, new { message = "You are not authorized to view rooms" });
                 }
-                List<Room> rooms = entities.Rooms.ToList();
-                return Request.CreateResponse(HttpStatusCode.OK, rooms);
+
+                // Calculate number of rooms to skip on pages before the current page
+                int skip = (pageNumber - 1) * pageSize;
+
+                // Get total number of rooms
+                int totalRooms = entities.Rooms.Count();
+
+                // Get the rooms for the current page
+                List<Room> rooms = entities.Rooms.OrderBy(r => r.roomID).Skip(skip).Take(pageSize).ToList();
+
+                // Create a response object
+                var response = new
+                {
+                    Rooms = rooms,
+                    TotalRooms = totalRooms,
+                    PageNumber = pageNumber,
+                    PageSize = pageSize,
+                    TotalPages = (int)Math.Ceiling((double)totalRooms / pageSize)
+                };
+
+                return Request.CreateResponse(HttpStatusCode.OK, response);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, e);
+            }
+        }
+
+        [HttpGet, Route("getRoomById/{roomID}")]
+        [CustomAuthenticationFilter]
+        public HttpResponseMessage GetRoomById(int roomID = 1)
+        {
+            try
+            {
+                var token = Request.Headers.GetValues("Authorization").FirstOrDefault();
+                TokenClaim tokenClaim = TokenManager.ValidateToken(token);
+                if (tokenClaim.role != "admin" && tokenClaim.role != "user")
+                {
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, new { message = "You are not authorized to view rooms" });
+                }
+                Room room = entities.Rooms.Find(roomID);
+                if (room != null)
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, room);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, new { message = "Room not found" });
+                }
             }
             catch (Exception e)
             {
