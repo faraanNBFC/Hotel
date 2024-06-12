@@ -52,6 +52,7 @@ import { LoginComponent } from './login/login.component';
 import { RoomComponent } from './room/room.component';
 import { ReservationComponent } from './reservation/reservation.component';
 import { AddRoomComponent } from './add-room/add-room.component';
+import { EditRoomComponent } from './edit-room/edit-room.component';
 
 const ngxuiLoaderConfig: NgxUiLoaderConfig = {
   text: 'Loading...',
@@ -79,7 +80,8 @@ const ngxuiLoaderConfig: NgxUiLoaderConfig = {
     LoginComponent,
     RoomComponent,
     ReservationComponent,
-    AddRoomComponent
+    AddRoomComponent,
+    EditRoomComponent
   ],
   imports: [
     BrowserModule,

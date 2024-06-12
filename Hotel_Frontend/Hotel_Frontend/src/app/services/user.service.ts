@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment'; 
 import { HttpClient, HttpHeaders } from '@angular/common/http'; 
 import { UserStorageService } from './user-storage.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -26,8 +27,14 @@ export class UserService {
     return this.httpClient.get(this.url + '/user/checkToken/');
   }
 
-  addNewRoom(data: any) {
+  addNewRoom(data: any): Observable<any>{
     return this.httpClient.post(this.url + '/rooms/addNewRoom/', data, {
+      headers: this.createAuthorizationHeader(),
+    });
+  }
+
+  getRooms(pageNumber: number): Observable<any>{
+    return this.httpClient.get(this.url + `/rooms/getRooms/${pageNumber}`, {
       headers: this.createAuthorizationHeader(),
     });
   }
