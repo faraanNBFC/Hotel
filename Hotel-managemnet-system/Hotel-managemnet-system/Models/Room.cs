@@ -14,6 +14,12 @@ namespace Hotel_managemnet_system.Models
     
     public partial class Room
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Room()
+        {
+            this.Reservations = new HashSet<Reservation>();
+        }
+    
         public int roomID { get; set; }
         public string roomNumber { get; set; }
         public string roomType { get; set; }
@@ -21,5 +27,8 @@ namespace Hotel_managemnet_system.Models
         public string roomStatus { get; set; }
         public string roomDescription { get; set; }
         public string roomImage { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Reservation> Reservations { get; set; }
     }
 }
