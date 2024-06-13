@@ -45,6 +45,12 @@ export class UserService {
     });
   }
 
+  getAvailableRooms(pageNumber: number): Observable<any> {
+    return this.httpClient.get(this.url + `/rooms/getAvailableRooms/${pageNumber}`, {
+      headers: this.createAuthorizationHeader(),
+    });
+  }
+
   updateRoom(roomId:number, data: any): Observable<any> {
     return this.httpClient.post(this.url + '/rooms/updateRooms', data, {
       headers: this.createAuthorizationHeader(),

@@ -104,6 +104,50 @@ namespace Hotel_managemnet_system.Controllers
             }
         }
 
+        [HttpGet, Route("getAvailableRooms/{pageNumber}")]
+        [CustomAuthenticationFilter]
+        public HttpResponseMessage GetAvailableRooms(int pageNumber = 1, int pageSize = 6)
+        {
+            try
+            {
+                var token = Request.Headers.GetValues("Authorization").FirstOrDefault();
+                TokenClaim tokenClaim = TokenManager.ValidateToken(token);
+                if (tokenClaim.role != "admin" && tokenClaim.role != "user")
+                {
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, new { message = "You are not authorized to view rooms" });
+                }
+
+                // Calculate number of rooms to skip on pages before the current page
+                int skip = (pageNumber - 1) * pageSize;
+
+                // Get total number of available rooms
+                int totalAvailableRooms = entities.Rooms.Count(r => r.roomStatus == "Available");
+
+                // Get the available rooms for the current page
+                List<Room> availableRooms = entities.Rooms.Where(r => r.roomStatus == "Available")
+                                                          .OrderBy(r => r.roomID)
+                                                          .Skip(skip)
+                                                          .Take(pageSize)
+                                                          .ToList();
+
+                // Create a response object
+                var response = new
+                {
+                    AvailableRooms = availableRooms,
+                    TotalAvailableRooms = totalAvailableRooms,
+                    PageNumber = pageNumber,
+                    PageSize = pageSize,
+                    TotalPages = (int)Math.Ceiling((double)totalAvailableRooms / pageSize)
+                };
+
+                return Request.CreateResponse(HttpStatusCode.OK, response);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, e);
+            }
+        }
+
         [HttpPost, Route("updateRooms")]
         [CustomAuthenticationFilter]
         public HttpResponseMessage UpdateRooms([FromBody] Room room)
