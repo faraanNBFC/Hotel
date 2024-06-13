@@ -138,5 +138,35 @@ namespace Hotel_managemnet_system.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, e);
             }
         }
+
+        [HttpDelete, Route("deleteRoom/{roomID}")]
+        [CustomAuthenticationFilter]
+        public HttpResponseMessage DeleteRoom(int roomID)
+        {
+            try
+            {
+                var token = Request.Headers.GetValues("Authorization").FirstOrDefault();
+                TokenClaim tokenClaim = TokenManager.ValidateToken(token);
+                if (tokenClaim.role != "admin")
+                {
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, new { message = "You are not authorized to delete room" });
+                }
+                Room deleteRoom = entities.Rooms.Find(roomID);
+                if (deleteRoom != null)
+                {
+                    entities.Rooms.Remove(deleteRoom);
+                    entities.SaveChanges();
+                    return Request.CreateResponse(HttpStatusCode.OK, new { message = "Room deleted successfully" });
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, new { message = "Room not found" });
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, e);
+            }
+        }
     }
 }

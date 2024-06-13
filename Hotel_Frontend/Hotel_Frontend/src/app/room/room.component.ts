@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { SnackbarService } from '../services/snackbar.service';
 import { PageEvent } from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
+import { GlobalConstants } from '../shared/global-constants';
 
 @Component({
   selector: 'app-room',
@@ -19,8 +21,9 @@ export class RoomComponent {
   rooms = [];
   total: any;
   loading = false;
+  responseMessage: any;
 
-  constructor(private userService: UserService, private snackbarService: SnackbarService) { }
+  constructor(private userService: UserService, private snackbarService: SnackbarService, private dialog: MatDialog) { }
 
   ngOnInit() {
     this.getRooms();
@@ -38,6 +41,22 @@ export class RoomComponent {
     console.log(event)
     this.currentPage = event.pageIndex;
     this.getRooms();
+  }
+
+  deleteRoom(roomId: number) {
+    this.userService.deleteRoom(roomId).subscribe(response => {
+      this.responseMessage = response?.message;
+      this.snackbarService.openSnackBar(this.responseMessage, '');
+      this.getRooms();
+    }, (error) => {
+      if (error.error?.message) {
+        this.responseMessage = error.error?.message;
+      }
+      else {
+        this.responseMessage = GlobalConstants.genericError;
+      }
+      this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+    })
   }
 
 }

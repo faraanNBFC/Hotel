@@ -39,6 +39,24 @@ export class UserService {
     });
   }
 
+  getRoomById(roomId: number): Observable<any> {
+    return this.httpClient.get(this.url + `/rooms/getRoomById/${roomId}`, {
+      headers: this.createAuthorizationHeader(),
+    });
+  }
+
+  updateRoom(roomId:number, data: any): Observable<any> {
+    return this.httpClient.post(this.url + '/rooms/updateRooms', data, {
+      headers: this.createAuthorizationHeader(),
+    });
+  }
+
+  deleteRoom(roomId: number): Observable<any> {
+    return this.httpClient.delete(this.url + `/rooms/deleteRoom/${roomId}`, {
+      headers: this.createAuthorizationHeader(),
+    });
+  }
+
   createAuthorizationHeader() {
     let authheaders: HttpHeaders = new HttpHeaders();
     return authheaders.set(

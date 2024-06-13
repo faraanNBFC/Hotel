@@ -17,6 +17,7 @@ const routes: Routes = [
   { path: 'room', component: RoomComponent, canActivate: [AuthGuardAdminService] },
   { path: 'reservation', component: ReservationComponent, canActivate: [AuthGuardAdminService] },
   { path: 'new', component: AddRoomComponent, canActivate: [AuthGuardAdminService] },
+  { path: 'edit/:id', component: EditRoomComponent, canActivate: [AuthGuardAdminService] },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 
