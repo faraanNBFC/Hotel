@@ -75,6 +75,18 @@ export class UserService {
     });
   }
 
+  getUserReservations(pageNumber: number, userID: number): Observable<any> {
+    return this.httpClient.get(this.url + `/reservations/getReservationsByUser/${userID}/${pageNumber}`, {
+      headers: this.createAuthorizationHeader(),
+    });
+  }
+
+  updateReservationStatus(data: any): Observable<any> {
+    return this.httpClient.post(this.url + '/reservations/updateReservationStatus', data, {
+      headers: this.createAuthorizationHeader(),
+    });
+  }
+
   createAuthorizationHeader() {
     let authheaders: HttpHeaders = new HttpHeaders();
     return authheaders.set(

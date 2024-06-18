@@ -36,6 +36,44 @@ export class ReservationComponent {
     })
   }
 
+  approveReservation(reservation: any) {
+    if (reservation.reservationStatus === 'Pending' ) {
+      reservation.reservationStatus = 'Approved';
+      this.userService.updateReservationStatus(reservation).subscribe(response => {
+        this.responseMessage = response?.message;
+        this.snackbarService.openSnackBar(this.responseMessage, '');
+      }, (error) => {
+        if (error.error?.message) {
+          this.responseMessage = error.error?.message;
+        }
+        else {
+          this.responseMessage = GlobalConstants.genericError;
+        }
+        this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+      })
+    }
+    console.log('Approving reservation', reservation);
+  }
+
+  cancelReservation(reservation: any) {
+    if (reservation.reservationStatus === 'Pending') {
+      reservation.reservationStatus = 'Canceled';
+      this.userService.updateReservationStatus(reservation).subscribe(response => {
+        this.responseMessage = response?.message;
+        this.snackbarService.openSnackBar(this.responseMessage, '');
+      }, (error) => {
+        if (error.error?.message) {
+          this.responseMessage = error.error?.message;
+        }
+        else {
+          this.responseMessage = GlobalConstants.genericError;
+        }
+        this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+      })
+    }
+    console.log('Canceling reservation', reservation);
+  }
+
   pageIndexChange(event: PageEvent) {
     console.log(event)
     this.currentPage = event.pageIndex;

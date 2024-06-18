@@ -7,7 +7,7 @@
     <div class="container-fluid">
       <div class="page__box">Reservations</div>
       <div class="page__content shadow">
-        <mat-table [dataSource]="reservations" matSort class="mat-elevation-z8">
+        <mat-table [dataSource]="reservations" matSort #sort="matSort" class="mat-elevation-z8">
 
           <!-- Room Name Column -->
           <ng-container matColumnDef="roomName">
@@ -55,7 +55,14 @@
           <ng-container matColumnDef="action">
             <mat-header-cell *matHeaderCellDef> Action </mat-header-cell>
             <mat-cell *matCellDef="let reservation">
-              <!-- Add any action buttons here -->
+              <!-- Approve Button, shown only if reservationStatus is 'Pending' -->
+              <button *ngIf="reservation.reservationStatus === 'Pending'" mat-button (click)="approveReservation(reservation)" color="primary">
+                <mat-icon>check_circle</mat-icon>
+              </button>
+              <!-- Cancel Button, shown only if reservationStatus is 'Pending' -->
+              <button *ngIf="reservation.reservationStatus === 'Pending'" mat-button (click)="cancelReservation(reservation)" color="warn">
+                <mat-icon>cancel</mat-icon>
+              </button>
             </mat-cell>
           </ng-container>
 
