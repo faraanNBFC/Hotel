@@ -25,6 +25,17 @@ namespace Hotel_managemnet_system.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.BadRequest, new { message = "You are not authorized to add reservation" });
                 }
+                if (reservation.userID == null || reservation.roomID == null || reservation.checkInDate == null || reservation.checkOutDate == null)
+                {
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, new { message = "Unable to complete reservation" });
+                }
+                Room room = entities.Rooms.FirstOrDefault(r => r.roomID == reservation.roomID);
+                if (room == null)
+                {
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, new { message = "Invalid roomID" });
+                }
+
+                reservation.price = room.price * (decimal)(reservation.checkOutDate - reservation.checkInDate).Value.TotalDays;
                 reservation.reservationStatus = "Pending";
                 entities.Reservations.Add(reservation);
                 entities.SaveChanges();
@@ -38,7 +49,7 @@ namespace Hotel_managemnet_system.Controllers
 
         [HttpGet, Route("getReservations/{pageNumber}")]
         [CustomAuthenticationFilter]
-        public HttpResponseMessage GetReservations(int pageNumber = 1, int pageSize = 6)
+        public HttpResponseMessage GetReservations(int pageNumber = 1, int pageSize = 5)
         {
             try
             {
@@ -56,7 +67,7 @@ namespace Hotel_managemnet_system.Controllers
                 int totalReservations = entities.Reservations.Count();
 
                 // Get the reservations for the current page
-                List<Reservation> reservations = entities.Reservations.OrderBy(r => r.reservationID).Skip(skip).Take(pageSize).ToList();
+                List<Reservation> reservations = entities.Reservations.OrderBy(r => r.id).Skip(skip).Take(pageSize).ToList();
 
                 return Request.CreateResponse(HttpStatusCode.OK, new { totalReservations = totalReservations, reservations = reservations });
             }
@@ -86,6 +97,36 @@ namespace Hotel_managemnet_system.Controllers
                 }
 
                 return Request.CreateResponse(HttpStatusCode.OK, reservation);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, e);
+            }
+        }
+
+        [HttpGet, Route("getReservationsByUser/{userID}/{pageNumber}")]
+        [CustomAuthenticationFilter]
+        public HttpResponseMessage GetReservationsByUser(int userID, int pageNumber = 1, int pageSize = 6)
+        {
+            try
+            {
+                var token = Request.Headers.GetValues("Authorization").FirstOrDefault();
+                TokenClaim tokenClaim = TokenManager.ValidateToken(token);
+                if (tokenClaim.role != "admin" && tokenClaim.role != "user")
+                {
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, new { message = "You are not authorized to view reservations" });
+                }
+
+                // Calculate number of reservations to skip on pages before the current page
+                int skip = (pageNumber - 1) * pageSize;
+
+                // Get total number of reservations
+                int totalReservations = entities.Reservations.Where(r => r.userID == userID).Count();
+
+                // Get the reservations for the current page
+                List<Reservation> reservations = entities.Reservations.Where(r => r.userID == userID).OrderBy(r => r.id).Skip(skip).Take(pageSize).ToList();
+
+                return Request.CreateResponse(HttpStatusCode.OK, new { totalReservations = totalReservations, reservations = reservations });
             }
             catch (Exception e)
             {

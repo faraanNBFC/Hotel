@@ -63,6 +63,18 @@ export class UserService {
     });
   }
 
+  bookRooms(data: any): Observable<any> {
+    return this.httpClient.post(this.url + '/reservations/addNewReservation', data, {
+      headers: this.createAuthorizationHeader(),
+    });
+  }
+
+  getReservations(pageNumber: number): Observable<any> {
+    return this.httpClient.get(this.url + `/reservations/getReservations/${pageNumber}`, {
+      headers: this.createAuthorizationHeader(),
+    });
+  }
+
   createAuthorizationHeader() {
     let authheaders: HttpHeaders = new HttpHeaders();
     return authheaders.set(

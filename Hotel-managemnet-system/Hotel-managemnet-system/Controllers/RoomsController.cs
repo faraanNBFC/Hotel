@@ -183,6 +183,38 @@ namespace Hotel_managemnet_system.Controllers
             }
         }
 
+        [HttpPost, Route("updateRoomStatus")]
+        [CustomAuthenticationFilter]
+        public HttpResponseMessage UpdateRoomStatus([FromBody] Room room)
+        {
+            try
+            {
+                var token = Request.Headers.GetValues("Authorization").FirstOrDefault();
+                TokenClaim tokenClaim = TokenManager.ValidateToken(token);
+                if (tokenClaim.role != "admin" && tokenClaim.role != "user")
+                {
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, new { message = "You are not authorized to update room status" });
+                }
+
+                Room updateRoom = entities.Rooms.Find(room.roomID);
+                if (updateRoom != null)
+                {
+                    updateRoom.roomStatus = room.roomStatus ?? updateRoom.roomStatus;
+                    entities.Entry(updateRoom).State = System.Data.Entity.EntityState.Modified;
+                    entities.SaveChanges();
+                    return Request.CreateResponse(HttpStatusCode.OK, new { message = "Room status updated successfully" });
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, new { message = "Room not found" });
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, e);
+            }
+        }
+
         [HttpDelete, Route("deleteRoom/{roomID}")]
         [CustomAuthenticationFilter]
         public HttpResponseMessage DeleteRoom(int roomID)

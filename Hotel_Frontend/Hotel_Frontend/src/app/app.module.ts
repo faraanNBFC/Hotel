@@ -53,6 +53,7 @@ import { RoomComponent } from './room/room.component';
 import { ReservationComponent } from './reservation/reservation.component';
 import { AddRoomComponent } from './add-room/add-room.component';
 import { EditRoomComponent } from './edit-room/edit-room.component';
+import { DatePickerComponent } from './date-picker/date-picker.component';
 
 const ngxuiLoaderConfig: NgxUiLoaderConfig = {
   text: 'Loading...',
@@ -81,7 +82,8 @@ const ngxuiLoaderConfig: NgxUiLoaderConfig = {
     RoomComponent,
     ReservationComponent,
     AddRoomComponent,
-    EditRoomComponent
+    EditRoomComponent,
+    DatePickerComponent
   ],
   imports: [
     BrowserModule,
