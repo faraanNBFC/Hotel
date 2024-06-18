@@ -37,7 +37,6 @@ export class LoginComponent implements OnInit{
     this.userService.login(data).subscribe((response: any) => {
       let token = response.token;
       let decodedToken = jwtDecode(token);
-      this.ngxService.stop();
       this.dialogRef.close();
       localStorage.setItem('token', response.token);
       this.router.navigate(['/hotel']);
@@ -65,6 +64,8 @@ export class LoginComponent implements OnInit{
         }else if (UserStorageService.isUserLoggedIn()){
           this.router.navigate(['/hotel']);
         }
+        this.ngxService.stop();
+
       }
     }, (error) => {
       this.ngxService.stop();

@@ -28,9 +28,6 @@ export class SidenavComponent {
     if (user) {
       this.isUser = user.role === 'user';
       this.isAdmin = user.role === 'admin';
-    } else {
-      // Handle the case when user is null
-      // For example, redirect to login or show an error message
-    }
+    } 
   }
 }

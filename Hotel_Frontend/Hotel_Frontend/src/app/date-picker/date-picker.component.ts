@@ -13,8 +13,6 @@ export class DatePickerComponent {
   dateRangeForm: FormGroup;
   minDate = new Date();
   blockedDates: Date[] = [
-    new Date(2024, 5, 20), 
-    new Date(2024, 5, 21),
     this.minDate,
   ];
 
@@ -35,7 +33,6 @@ export class DatePickerComponent {
   dateFilter = (d: Date | null): boolean => {
     const date = (d || new Date());
     const today = new Date();
-    today.setHours(0, 0, 0, 0); 
     return date >= today && !this.blockedDates.some(blockedDate =>
       date.getDate() === blockedDate.getDate() &&
       date.getMonth() === blockedDate.getMonth() &&

@@ -11,10 +11,18 @@ export class AuthGuardAdminService implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
     const token = localStorage.getItem('token');
-    const userRole = UserStorageService.getUser().role;
+    const user = UserStorageService.getUser();
     const currentUrl = this.router.url;
-    if (!token || userRole !== 'admin') {
-      this.router.navigateByUrl(currentUrl);
+
+    if (!token || !user) {
+      this.router.navigate([currentUrl]);
+      return false;
+    }
+    if (user.role === 'user') {
+      this.router.navigate(['/hotel']);
+      return false;
+    }
+    if (user.role !== 'admin') {
       return false;
     }
     return true;

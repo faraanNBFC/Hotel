@@ -4,11 +4,31 @@ import { SnackbarService } from '../services/snackbar.service';
 import { PageEvent } from '@angular/material/paginator';
 import { GlobalConstants } from '../shared/global-constants';
 import { MatDialog } from '@angular/material/dialog';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-reservation',
   templateUrl: './reservation.component.html',
-  styleUrl: './reservation.component.css'
+  styleUrl: './reservation.component.css',
+  animations: [
+    trigger('statusChange', [
+      state('Pending', style({
+        backgroundColor: '#FFCA28', // yellow
+        transform: 'scale(1)'
+      })),
+      state('Approved', style({
+        backgroundColor: '#66BB6A', // green
+        transform: 'scale(1)'
+      })),
+      state('Canceled', style({
+        backgroundColor: '#EF5350', // red
+        transform: 'scale(1)'
+      })),
+      transition('* => Pending', animate('500ms ease-in')),
+      transition('* => Approved', animate('500ms ease-in')),
+      transition('* => Canceled', animate('500ms ease-in'))
+    ])
+  ]
 })
 export class ReservationComponent {
   sideBarOpen = true;

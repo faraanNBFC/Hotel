@@ -11,13 +11,20 @@ export class AuthGuardService implements CanActivate{
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
     const token = localStorage.getItem('token');
-    const userRole = UserStorageService.getUser().role;
+    const user = UserStorageService.getUser();
     const currentUrl = this.router.url;
-     if(!token || userRole !== 'user') {
-        this.router.navigate([currentUrl]);
-        return false;
+    if (!token || !user) {
+      this.router.navigate([currentUrl]);
+      return false;
     }
-      return true;
+    if (user.role === 'admin') {
+      this.router.navigate(['/room']);
+      return false;
+    }
+    if (user.role !== 'user') {
+      return false;
+    }
+    return true;
   }
 
 }

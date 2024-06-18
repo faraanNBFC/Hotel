@@ -48,7 +48,9 @@
           <!-- Status Column -->
           <ng-container matColumnDef="status">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Status </mat-header-cell>
-            <mat-cell *matCellDef="let reservation"> {{ reservation.reservationStatus }} </mat-cell>
+            <mat-cell *matCellDef="let reservation" [@statusChange]="reservation.reservationStatus">
+              {{ reservation.reservationStatus }}
+            </mat-cell>
           </ng-container>
 
           <!-- Action Column (if needed) -->
