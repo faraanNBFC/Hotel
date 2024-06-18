@@ -69,7 +69,7 @@ namespace Hotel_managemnet_system.Controllers
                 // Get the reservations for the current page
                 List<Reservation> reservations = entities.Reservations.OrderBy(r => r.id).Skip(skip).Take(pageSize).ToList();
 
-                return Request.CreateResponse(HttpStatusCode.OK, new { totalReservations = totalReservations, reservations = reservations });
+                return Request.CreateResponse(HttpStatusCode.OK, new { totalReservations = totalReservations, PageNumber = pageNumber, PageSize = pageSize, reservations = reservations });
             }
             catch (Exception e)
             {
@@ -106,7 +106,7 @@ namespace Hotel_managemnet_system.Controllers
 
         [HttpGet, Route("getReservationsByUser/{userID}/{pageNumber}")]
         [CustomAuthenticationFilter]
-        public HttpResponseMessage GetReservationsByUser(int userID, int pageNumber = 1, int pageSize = 6)
+        public HttpResponseMessage GetReservationsByUser(int userID, int pageNumber = 1, int pageSize = 5)
         {
             try
             {
@@ -126,7 +126,7 @@ namespace Hotel_managemnet_system.Controllers
                 // Get the reservations for the current page
                 List<Reservation> reservations = entities.Reservations.Where(r => r.userID == userID).OrderBy(r => r.id).Skip(skip).Take(pageSize).ToList();
 
-                return Request.CreateResponse(HttpStatusCode.OK, new { totalReservations = totalReservations, reservations = reservations });
+                return Request.CreateResponse(HttpStatusCode.OK, new { totalReservations = totalReservations, PageNumber = pageNumber, PageSize = pageSize, reservations = reservations });
             }
             catch (Exception e)
             {

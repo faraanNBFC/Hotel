@@ -1,4 +1,9 @@
 import { Component } from '@angular/core';
+import { UserService } from '../services/user.service';
+import { SnackbarService } from '../services/snackbar.service';
+import { PageEvent } from '@angular/material/paginator';
+import { GlobalConstants } from '../shared/global-constants';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-reservation',
@@ -10,4 +15,31 @@ export class ReservationComponent {
   sideBarToggler() {
     this.sideBarOpen = !this.sideBarOpen;
   }
+  currentPage = 0;
+  reservations = [];
+  total: any;
+  loading = false;
+  responseMessage: any;
+  displayedColumns: string[] = ['roomName', 'roomType', 'checkInDate', 'checkOutDate', 'username', 'price', 'status', 'action'];
+
+  constructor(private userService: UserService, private snackbarService: SnackbarService, private dialog: MatDialog) { }
+
+  ngOnInit() {
+    this.getReservations();
+  }
+
+  getReservations() {
+    this.userService.getReservations(this.currentPage + 1).subscribe(response => {
+      console.log(response);
+      this.reservations = response.reservations;
+      this.total = response.totalReservations;
+    })
+  }
+
+  pageIndexChange(event: PageEvent) {
+    console.log(event)
+    this.currentPage = event.pageIndex;
+    this.getReservations();
+  }
+
 }

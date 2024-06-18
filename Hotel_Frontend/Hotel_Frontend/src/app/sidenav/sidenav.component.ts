@@ -9,17 +9,28 @@ import { Router } from '@angular/router';
 })
 export class SidenavComponent {
 
-  isUser: boolean = UserStorageService.getUser().role === 'user' ? true : false;
-  isAdmin: boolean = UserStorageService.getUser().role === 'admin' ? true : false;
+  isUser: boolean =  false;
+  isAdmin: boolean =  false;
 
   constructor(private router: Router) { }
 
   ngOnInit(): void {
+    this.updateUserRoles();
     this.router.events.subscribe(event => {
       if (event.constructor.name === "NavigationEnd") {
-        this.isUser = UserStorageService.getUser().role === 'user' ? true : false;
-        this.isAdmin = UserStorageService.getUser().role === 'admin' ? true : false;
+        this.updateUserRoles();
       }
-    })
+    });
+  }
+
+  updateUserRoles(): void {
+    const user = UserStorageService.getUser();
+    if (user) {
+      this.isUser = user.role === 'user';
+      this.isAdmin = user.role === 'admin';
+    } else {
+      // Handle the case when user is null
+      // For example, redirect to login or show an error message
+    }
   }
 }
